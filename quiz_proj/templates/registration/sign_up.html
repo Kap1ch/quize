@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 {% load  bootstrap %}
 {% block title %}
-    Регистрация
+    Реєстрація
 {% endblock title %}
 {% block content %}
     <div class="container text-center sign-in">
         {% if user_form.errors %}
-            <p>Данные не коректны</p>
+            <p>Данні не конкретні</p>
         {% else %}
             <h1 class="h3 mb-3 font-weight-normal">
-                Пожалуйста заполните форму регистрации
+                Будь ласка заповніть форму реєстрації
             </h1>
         {% endif %}
         <form action="" class="form-sign-in login-form" method="post">
@@ -20,9 +20,9 @@
             {{ user_form.last_name|bootstrap }}
             {% csrf_token %}
             <button class="btn btn-lg btn-primary mt-2" type="submit">
-                Зарегистрироваться
+                Зареєструватися
             </button>
         </form>
-        <a href="{% url 'quizes:login' %}">У меня уже есть профиль </a>
+        <a href="{% url 'quizes:login' %}">У мене уже є акаунт </a>
     </div>
 {% endblock content %}

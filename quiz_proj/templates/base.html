@@ -25,7 +25,7 @@
                     {% else %}
                         "{% url 'quizes:login' %}"
                     {% endif %}
-                        >Главная</a>
+                        >Головна</a>
         </nav>
 
     <div id="header">
@@ -33,10 +33,10 @@
                 {% if request.user.is_authenticated %}
                     <form id="logout-form" action="{% url 'quizes:logout' %}" method="POST" style="display: inline;">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Выйти</button>
+                        <button type="submit" class="btn btn-link" style="padding: 0; border: none; background: none;">Вийти</button>
                     </form>
                 {% else %}
-                    <a href="{% url 'quizes:login' %}">Войти</a>
+                    <a href="{% url 'quizes:login' %}">Війти</a>
                 {% endif %}
             </span>
     </div>
