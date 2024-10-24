@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'quizes',
     'questions',
     'results',
+    'bootstrapform',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +127,7 @@ STATICFILES_DIRS = [
     # BASE_DIR / 'quizes' / 'static',
 ]
 
+LOGIN_REDIRECT_URL = 'quizes:main-view'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

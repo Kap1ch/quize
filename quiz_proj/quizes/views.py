@@ -1,8 +1,12 @@
-from django.http import JsonResponse
-from django.shortcuts import render
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
-from.models import Quiz
+from .forms import LoginForm, UserCreateForm
+from .models import Quiz
 from questions.models import Question, Answer
 
 from results.models import Result
@@ -14,9 +18,47 @@ class QuizListView(ListView):
     model = Quiz
     template_name = 'quizes/main.html'
 
+
+def user_login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            cd = form.cleaned_data
+            user = authenticate(request,
+                                username=cd['username'],
+                                password=cd['password'])
+            if user is not None:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponse('Authenticated successfully')
+                else:
+                    return HttpResponse('Disabled account')
+            else:
+                return HttpResponse('Invalid login')
+    else:
+        form = LoginForm()
+    return render(request, 'blog/account/login.html', {'form': form})
+
+
+def sign_up(request):
+    user_form = UserCreateForm()
+    if request.method == 'POST':
+        user_form = UserCreateForm(request.POST)
+        if user_form.is_valid():
+            new_user = User.objects.create_user(**user_form.cleaned_data)
+            new_user.save()
+            login(request, authenticate(username=user_form.cleaned_data['username'],
+                                        password=user_form.cleaned_data['password']))
+            return redirect('quizes:main-view')
+    return render(request, 'registration/sign_up.html', {'user_form': user_form})
+
+
 def quiz_view(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     return render(request, 'quizes/quiz.html', {'obj': quiz})
+
+def main_page(request):
+    return render(request, 'base.html', {'login': 'You need loggin'})
 
 def quiz_data_view(request, pk):
     quiz = Quiz.objects.get(pk=pk)
