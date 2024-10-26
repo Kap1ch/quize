@@ -53,113 +53,284 @@ const activateTimer = (time) => {
 }
 
 
+//$.ajax({
+//    type: 'GET',
+//    url: `${url}data`,
+//    success: function(response) {
+//        const data = response.data;
+//        let htmlContent = '';  // Буфер для HTML-контента
+//
+//        data.forEach(el => {
+//            for (const question in el) {
+//                const answers = el[question];
+//
+//                // Добавляем вопрос в буфер
+//                htmlContent += `
+//                    <hr>
+//                    <div class="mb-2">
+//                        <b>${question}</b>
+//                    </div>
+//                `;
+//
+//                // Добавляем ответы в буфер
+//                answers.forEach(answer => {
+//                    htmlContent += `
+//                        <div>
+//                            <input type="radio" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
+//                            <label for="${question}-${answer}">${answer}</label>
+//                        </div>
+//                    `;
+//                });
+//            }
+//        });
+//
+//        quizBox.innerHTML = htmlContent;  // Устанавливаем весь HTML-контент за один раз
+//        activateTimer(response.time);
+//    },
+//    error: function(error) {
+//        console.log(error);
+//    }
+//});
+//
+//
+
+//$.ajax({
+//    type: 'GET',
+//    url: `${url}data`,
+//    success: function(response) {
+//        const data = response.data;
+////		console.log(data)
+//        quizBox.innerHTML = '';  // Очищаем контейнер перед добавлением вопросов
+//
+//        data.forEach(el => {
+////            for (const questionText in el) {
+//                const answers = el['answers'];
+//				console.log(answers)
+//                // Вставляем вопрос
+//                const questionContainer = document.createElement('div');
+//                questionContainer.classList.add('question-container');
+//
+//                // Добавляем HTML для текста вопроса
+//                questionContainer.innerHTML = `
+//                    <div class="mb-2">
+//                        <b>${el['question_text']}</b>
+//                    </div>
+//                    <hr>
+//                `;
+//
+//                // Контейнер для ответов
+//                const answersContainer = document.createElement('div');
+//                answersContainer.classList.add('answers');
+////                answersContainer.dataset.question = questionText;
+//
+//                // Добавляем каждый ответ
+//                answers.forEach(answerObj => {
+//                    const answerText = answerObj.text;
+//                    const isCorrect = answerObj.correct;  // Предполагается, что в ответе есть флаг "correct"
+//
+//                    // Создаем HTML для каждого ответа
+//                    const answerDiv = document.createElement('div');
+//                    answerDiv.classList.add('answer');
+//                    answerDiv.dataset.correct = isCorrect;  // Сохраняем правильность ответа в атрибуте
+//                    answerDiv.textContent = answerText;
+//
+//                    // Добавляем обработчик для клика по ответу
+//                    answerDiv.addEventListener('click', function() {
+//                        // Убираем классы "correct" и "incorrect" у всех ответов текущего вопроса
+//                        Array.from(answersContainer.children).forEach(ans => ans.classList.remove('correct', 'incorrect'));
+//
+//                        // Добавляем нужный класс в зависимости от правильности ответа
+//                        if (answerDiv.dataset.correct === "true") {
+//                            answerDiv.classList.add('correct');
+//							cosole.log(scoreBox)
+//                        } else {
+//                            answerDiv.classList.add('incorrect');
+//                            // Подсвечиваем правильный ответ, если выбрали неверный
+//                            Array.from(answersContainer.children).forEach(ans => {
+//                                if (ans.dataset.correct === "true") {
+//                                    ans.classList.add('correct');
+//                                }
+//                            });
+//                        }
+//                    });
+//
+//                    // Добавляем ответ в контейнер ответов
+//                    answersContainer.appendChild(answerDiv);
+//                });
+//
+//                // Добавляем контейнер с вопросом и ответами в основное поле
+//                questionContainer.appendChild(answersContainer);
+//                quizBox.appendChild(questionContainer);
+////            }
+//        });
+//
+//        activateTimer(response.time);
+//    },
+//    error: function(error) {
+//        console.log(error);
+//    }
+//});
+//
+///////////////////////////////////////////////////////////////
+//const quizForm = document.getElementById('quiz-form')
+//const csrf = document.getElementsByName('csrfmiddlewaretoken')
+//
+//const sendData = () => {
+//	const elements = [...document.getElementsByClassName('ans')]
+//	const data = {}
+//	data['csrfmiddlewaretoken'] = csrf[0].value
+//	elements.forEach(el =>{
+//		if (el.checked) {
+//			data[el.name]= el.value
+//		} else{
+//			if(!data[el.name]){
+//				data[el.name] = null
+//			}
+//		}
+//	})
+//
+//	$.ajax({
+//		type:'POST',
+//		url: `${url}save/`,
+//		data: data,
+//		success:function(response){
+//			// console.log(response)
+//			const results = response.results
+////			console.log(results)
+//			quizForm.classList.add('not-visible')
+//
+//			scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups..:('}Your result is ${response.score.toFixed(2)}`
+//
+//
+//			results.forEach(res=>{
+//				const resDiv = document.createElement("div")
+//				for (const [question, resp] of Object.entries(res)){
+//					// console.log(question)
+//					// console.log(resp)
+//					// console.log('******')
+//
+//					resDiv.innerHTML += question
+//					const cls = ['container', 'p-3', 'text-light', 'h6']
+//					resDiv.classList.add(...cls)
+//
+//					if (resp=='not answered'){
+//						resDiv.innerHTML += '- not answered'
+//						resDiv.classList.add('bg-danger')
+//					}
+//					else{
+//						const answer  = resp['answered']
+//						const correct = resp['correct_answer']
+//
+//						if (answer == correct){
+//							resDiv.classList.add('bg-success')
+//							resDiv.innerHTML += ` answered: ${answer}`
+//						} else {
+//							resDiv.classList.add('bg-danger')
+//							resDiv.innerHTML += ` | correct answer: ${correct}`
+//							resDiv.innerHTML += ` | answered: ${answer}`
+//						}
+//
+//					}
+//
+//				}
+//				// const body = document.getElementsByTagName('BODY')[0]
+//				resultBox.append(resDiv)
+//			})
+//		},
+//		error: function(error){
+//			console.log(error)
+//		}
+//
+//	})
+//}
+//
+//
+//quizForm.addEventListener('submit', e=>{
+//	e.preventDefault()
+//
+//	sendData()
+//
+//})
+
+
+/////////////
+
+let correctAnswersCount = 0; // Количество правильных ответов
+let totalQuestionsCount = 0;  // Общее количество вопросов
+
 $.ajax({
-	type:'GET',
-	url: `${url}data`,
-	success: function(response){
-		const data = response.data
-		data.forEach(el =>{
-			for (const [question, answers] of Object.entries(el)){
-				quizBox.innerHTML += `
-					<hr>
-					<div class="mb-2">
-						<b>${question}</b>
-					</div>
+    type: 'GET',
+    url: `${url}data`,
+    success: function(response) {
+        const data = response.data;
+        quizBox.innerHTML = '';  // Очищаем контейнер перед добавлением вопросов
 
-				`
-				answers.forEach(answer=>{
-					quizBox.innerHTML += `
-						<div>
-							<input type="radio" class="ans" id="${question}-${answer}" name="${question}" value="${answer}">
-							<lable for="${question}">${answer}</label>
-						</div>
-					`
-				})
-			}
-		});
-		activateTimer(response.time)
-	},
-	error: function(error){
-		console.log(error)
-	}
-})
+        totalQuestionsCount = data.length; // Обновляем общее количество вопросов
 
-const quizForm = document.getElementById('quiz-form')
-const csrf = document.getElementsByName('csrfmiddlewaretoken')
+        data.forEach(el => {
+            const answers = el['answers'];
+            const questionContainer = document.createElement('div');
+            questionContainer.classList.add('question-container');
 
-const sendData = () => {
-	const elements = [...document.getElementsByClassName('ans')]
-	const data = {}
-	data['csrfmiddlewaretoken'] = csrf[0].value
-	elements.forEach(el =>{
-		if (el.checked) {
-			data[el.name]= el.value
-		} else{
-			if(!data[el.name]){
-				data[el.name] = null
-			}
-		}
-	})
+            questionContainer.innerHTML = `
+                <div class="mb-2">
+                    <b>${el['question_text']}</b>
+                </div>
+                <hr>
+            `;
 
-	$.ajax({
-		type:'POST',
-		url: `${url}save/`,
-		data: data,
-		success:function(response){
-			// console.log(response)
-			const results = response.results
-			console.log(results)
-			quizForm.classList.add('not-visible')
+            const answersContainer = document.createElement('div');
+            answersContainer.classList.add('answers');
 
-			scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups..:('}Your result is ${response.score.toFixed(2)}`
+            answers.forEach(answerObj => {
+                const answerText = answerObj.text;
+                const isCorrect = answerObj.correct;
 
+                const answerDiv = document.createElement('div');
+                answerDiv.classList.add('answer');
+                answerDiv.dataset.correct = isCorrect;
+                answerDiv.textContent = answerText;
 
-			results.forEach(res=>{
-				const resDiv = document.createElement("div")
-				for (const [question, resp] of Object.entries(res)){
-					// console.log(question)
-					// console.log(resp)
-					// console.log('******')
+                answerDiv.addEventListener('click', function() {
+                    Array.from(answersContainer.children).forEach(ans => ans.classList.remove('correct', 'incorrect'));
 
-					resDiv.innerHTML += question
-					const cls = ['container', 'p-3', 'text-light', 'h6']
-					resDiv.classList.add(...cls)
+                    if (answerDiv.dataset.correct === "true") {
+                        answerDiv.classList.add('correct');
+                        correctAnswersCount++; // Увеличиваем счетчик правильных ответов
+                    } else {
+                        answerDiv.classList.add('incorrect');
+                        Array.from(answersContainer.children).forEach(ans => {
+                            if (ans.dataset.correct === "true") {
+                                ans.classList.add('correct');
+                            }
+                        });
+                    }
+                });
 
-					if (resp=='not answered'){
-						resDiv.innerHTML += '- not answered'
-						resDiv.classList.add('bg-danger')
-					}
-					else{
-						const answer  = resp['answered']
-						const correct = resp['correct_answer']
+                answersContainer.appendChild(answerDiv);
+            });
 
-						if (answer == correct){
-							resDiv.classList.add('bg-success')
-							resDiv.innerHTML += ` answered: ${answer}`
-						} else {
-							resDiv.classList.add('bg-danger')
-							resDiv.innerHTML += ` | correct answer: ${correct}`
-							resDiv.innerHTML += ` | answered: ${answer}`
-						}
+            questionContainer.appendChild(answersContainer);
+            quizBox.appendChild(questionContainer);
+        });
 
-					}
+        activateTimer(response.time);
+    },
+    error: function(error) {
+        console.log(error);
+    }
+});
 
-				}
-				// const body = document.getElementsByTagName('BODY')[0]
-				resultBox.append(resDiv)
-			})
-		},
-		error: function(error){
-			console.log(error)
-		}
+// Обработка отправки формы
+document.getElementById('quiz-form').addEventListener('submit', function(e) {
+    e.preventDefault(); // Предотвращаем обычное поведение отправки формы
 
-	})
-}
+    const percentage = (correctAnswersCount / totalQuestionsCount) * 100; // Подсчет процента правильных ответов
 
+    // Обновление содержимого score-box и result-box
+    document.getElementById('score-box').textContent = `Кількість правильних відповідей: ${correctAnswersCount} з ${totalQuestionsCount}`;
+    document.getElementById('result-box').textContent = `Процент правильних відповідей: ${percentage.toFixed(2)}% correct!`;
 
-quizForm.addEventListener('submit', e=>{
-	e.preventDefault()
-
-	sendData()
-})
+    // Здесь вы можете добавить логику для отправки результатов на сервер, если необходимо
+});
 

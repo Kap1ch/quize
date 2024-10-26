@@ -1,8 +1,10 @@
+import random
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView
 
 from .forms import LoginForm, UserCreateForm
@@ -61,18 +63,61 @@ def main_page(request):
     return render(request, 'base.html', {'login': 'You need loggin'})
 
 def quiz_data_view(request, pk):
-    quiz = Quiz.objects.get(pk=pk)
-    questions = []
-    for q in quiz.get_questions():
-        answers = []
-        for a in q.get_answer():
-            answers.append(a.text)
-        questions.append({str(q): answers})
+    # quiz = Quiz.objects.get(pk=pk)
+    # questions = []
+    # for q in quiz.get_questions():
+    #     answers = []
+    #     for a in q.get_answer():
+    #         answers.append(a.text)
+    #     questions.append({str(q): answers})
+    #
+    # print({
+    #     'data': questions,
+    #     'time': quiz.time,
+    # })
+    # return JsonResponse({
+    #     'data': questions,
+    #     'time': quiz.time,
+    # })
+
+##########
+    # quiz = get_object_or_404(Quiz, pk=pk)
+    #
+    # questions_data = []
+    # questions = quiz.question_set.prefetch_related('answer_set')
+    #
+    # for q in questions:
+    #     print(q)
+    #     questions_data.append({
+    #         f'{q.text}': [a.text for a in q.answer_set.all()],
+    #     })
+    # return JsonResponse({
+    #     'data': questions_data,
+    #     'time': quiz.time,
+    # })
+
+#######
+    quiz = get_object_or_404(Quiz, pk=pk)
+
+    # Используем prefetch_related, чтобы уменьшить количество запросов к базе данных
+    questions_data = []
+    questions = quiz.question_set.prefetch_related('answer_set')
+
+    for q in questions:
+        # Собираем ответы в список с учетом их правильности
+        answers = [{'text': a.text, 'correct': a.correct} for a in q.answer_set.all()]
+
+        # Добавляем структурированный вопрос в итоговый список
+        questions_data.append({
+            'question_text': q.text,
+            'answers': answers,
+        })
 
     return JsonResponse({
-        'data': questions,
+        'data': questions_data,
         'time': quiz.time,
     })
+
 
 def save_quiz_view(request, pk):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':

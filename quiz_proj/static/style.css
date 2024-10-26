@@ -1,3 +1,26 @@
 .not-visible {
     display: none;
 }
+
+.question-container {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+    }
+.answer {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    transition: background-color 0.3s;
+}
+.answer.correct {
+    background-color: #a1f2b1; /* Light green for correct answer */
+}
+.answer.incorrect {
+    background-color: #f2b1b1; /* Light red for incorrect answer */
+}
+.answer:hover {
+    background-color: #e0e0e0; /* Light gray on hover */
+}
+
