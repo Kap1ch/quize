@@ -257,12 +257,16 @@ const activateTimer = (time) => {
 
 let correctAnswersCount = 0; // Количество правильных ответов
 let totalQuestionsCount = 0;  // Общее количество вопросов
+console.log('hello quiz')
 
 $.ajax({
     type: 'GET',
     url: `${url}data`,
     success: function(response) {
         const data = response.data;
+        console.log('hello quiz')
+        console.log(response)
+
         quizBox.innerHTML = '';  // Очищаем контейнер перед добавлением вопросов
 
         totalQuestionsCount = data.length; // Обновляем общее количество вопросов
@@ -292,13 +296,21 @@ $.ajax({
                 answerDiv.textContent = answerText;
 
                 answerDiv.addEventListener('click', function() {
+                    // Если уже был выбран ответ, не делаем ничего
+                    if (answersContainer.querySelector('.selected')) return;
+
+                    // Удаляем классы 'correct' и 'incorrect' у всех ответов
                     Array.from(answersContainer.children).forEach(ans => ans.classList.remove('correct', 'incorrect'));
+
+                    // Отмечаем выбранный ответ
+                    answerDiv.classList.add('selected');
 
                     if (answerDiv.dataset.correct === "true") {
                         answerDiv.classList.add('correct');
                         correctAnswersCount++; // Увеличиваем счетчик правильных ответов
                     } else {
                         answerDiv.classList.add('incorrect');
+                        // Показываем правильный ответ
                         Array.from(answersContainer.children).forEach(ans => {
                             if (ans.dataset.correct === "true") {
                                 ans.classList.add('correct');
@@ -329,8 +341,10 @@ document.getElementById('quiz-form').addEventListener('submit', function(e) {
 
     // Обновление содержимого score-box и result-box
     document.getElementById('score-box').textContent = `Кількість правильних відповідей: ${correctAnswersCount} з ${totalQuestionsCount}`;
-    document.getElementById('result-box').textContent = `Процент правильних відповідей: ${percentage.toFixed(2)}% correct!`;
-
+    document.getElementById('result-box').innerHTML = `
+        <p>Відсоток правильних відповідей: ${percentage.toFixed(2)}% correct!</p>
+        <a href="${document.getElementById('back-button').getAttribute('data-url')}" class="btn btn-danger">Назад</a>
+    `;
     // Здесь вы можете добавить логику для отправки результатов на сервер, если необходимо
 });
 

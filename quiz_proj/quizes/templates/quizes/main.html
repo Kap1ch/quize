@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base_home.html" %}
 {% load static %}
 
 {% block scripts %}
@@ -9,7 +9,7 @@
 home
 {% endblock title %}
 
-{% block content %}
+{% block list_content %}
 
 <!-- Modal -->
 <div class="modal fade" id="quizStartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -32,7 +32,7 @@ home
 
 <div class="h1">Список тестів</div>
 <hr>
-{% for obj in object_list%}
+{% for obj in quize_list%}
   <button
     class="btn btn-link modal-button"
     data-pk="{{obj.pk}}"
@@ -46,4 +46,4 @@ home
     {{obj.name}}
   </button><br>
 {% endfor %}
-{% endblock content %}
+{% endblock list_content %}
